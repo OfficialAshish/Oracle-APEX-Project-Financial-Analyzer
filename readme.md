@@ -6,6 +6,8 @@
 
 **Project Margin Manager** is a centralized financial analysis system built on **Oracle APEX** and **Oracle 23ai**. 
 
+[LIVE, Click here](https://oracleapex.com/ords/r/ashish_9/project-mystery/dashboard)
+
 Organizations often face challenges with disorganized data spread across multiple files, leading to manual errors and a lack of real-time visibility into project profitability. This solution serves as a unified financial command center that unifies data sources, automates margin calculations, and utilizes **Generative AI** to provide conversational insights into financial data.
 
 ## 🚀 Key Features
@@ -80,7 +82,4 @@ Follow these steps to set up the application in your Oracle APEX environment.
     * **Build Status Override:** Run and Build Application
 4.  Click **Export Application**.
 
----
-
-## 📄 License
-[Insert License Name, e.g., MIT License]
+--- 
