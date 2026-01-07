@@ -285,3 +285,68 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('-- Client report: SELECT * FROM TABLE(client_reports_pkg.get_client_profitability());');
 END;
 /
+
+
+CREATE OR REPLACE PACKAGE employee_project_pkg AS
+  OVERHEAD_CHARGES CONSTANT NUMBER := 0;
+  USD_TO_INR       CONSTANT NUMBER := 85;
+  EMP_HOURS        CONSTANT NUMBER := 1800; -- 200 days x 9 hours
+
+  TYPE emp_margin_row IS RECORD (
+    employee_id       VARCHAR2(80),
+    employee_name     VARCHAR2(150),
+    designation       VARCHAR2(80),
+    grade             VARCHAR2(10),
+    competency        VARCHAR2(80),
+    annual_ctc        NUMBER(12,2),
+    bill_rate         NUMBER,
+    gross_margin_pct  NUMBER
+  );
+
+  TYPE emp_margin_tab IS TABLE OF emp_margin_row;
+
+  FUNCTION get_employee_margin(p_emp_id VARCHAR2 DEFAULT NULL)
+    RETURN emp_margin_tab PIPELINED;
+END employee_project_pkg;
+/
+
+CREATE OR REPLACE PACKAGE BODY employee_project_pkg AS
+  FUNCTION get_employee_margin(p_emp_id VARCHAR2 DEFAULT NULL)
+    RETURN emp_margin_tab PIPELINED
+  IS
+    CURSOR c_emp IS
+      SELECT employee_id, employee_name, designation, grade, competency,
+             annual_ctc, bill_rate
+      FROM employees
+      WHERE p_emp_id IS NULL OR employee_id = p_emp_id;
+
+    l_row emp_margin_row;
+    l_total_cost NUMBER;
+    bill_rate_inr_tot NUMBER;   -- DECLARE HERE
+  BEGIN
+    FOR r IN c_emp LOOP
+      l_row.employee_id    := r.employee_id;
+      l_row.employee_name  := r.employee_name;
+      l_row.designation    := r.designation;
+      l_row.grade          := r.grade;
+      l_row.competency     := r.competency;
+      l_row.annual_ctc     := r.annual_ctc;
+      l_row.bill_rate      := r.bill_rate; 
+      
+      bill_rate_inr_tot := r.bill_rate * EMP_HOURS * USD_TO_INR; 
+      l_total_cost      := r.annual_ctc + OVERHEAD_CHARGES;
+
+      IF l_row.bill_rate > 0 THEN
+        l_row.gross_margin_pct := ROUND(
+          ((bill_rate_inr_tot - l_total_cost) / bill_rate_inr_tot) * 100, 2
+        );
+      ELSE
+        l_row.gross_margin_pct := NULL;
+      END IF;
+      
+      PIPE ROW(l_row);
+    END LOOP;
+    RETURN;
+  END get_employee_margin;
+END employee_project_pkg;
+/

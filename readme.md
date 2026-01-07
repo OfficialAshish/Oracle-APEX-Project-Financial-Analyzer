@@ -6,7 +6,7 @@
 
 **Project Margin Manager** is a centralized financial analysis system built on **Oracle APEX** and **Oracle 23ai**. 
 
-[LIVE, Click here](https://oracleapex.com/ords/r/ashish_9/project-mystery/dashboard)
+[LIVE, Click here](https://oracleapex.com/ords/r/ashish_9/project-mystery232120/dashboard)
 
 Organizations often face challenges with disorganized data spread across multiple files, leading to manual errors and a lack of real-time visibility into project profitability. This solution serves as a unified financial command center that unifies data sources, automates margin calculations, and utilizes **Generative AI** to provide conversational insights into financial data.
 
@@ -70,6 +70,59 @@ Follow these steps to set up the application in your Oracle APEX environment.
 3.  Upload the **three required Excel files** (Revenue, Costs, Efforts) using the templates provided in the `sample_data` folder.
 4.  Once uploaded, the PL/SQL automation will trigger, and dashboards will populate automatically.
 
+---
+---
+
+## ⚙️ Handling Excel Import & Schema Customization
+This is a great addition to your documentation. Handling Excel data variations is one of the most common challenges in APEX development.
+
+I have drafted a new section below called **"Handling Excel Import & Schema Customization"** that you can insert directly into your `README.md` (recommended placement is right after the **Installation Guide** or as a sub-section of **Data Initialization**).
+
+---
+
+## 🛠 Troubleshooting: Excel Import & Schema Customization
+
+Because different organizations use different Excel formats, you may encounter mapping errors during the initial data load. If your source files do not perfectly match the provided templates, follow these steps to redefine the data definitions.
+
+### 1. Modify Table Structures
+
+If your data contains extra essential columns or lacks certain fields, update the database tables first:
+
+* Navigate to **SQL Workshop** → **Object Browser**.
+* Select the relevant table (e.g., `PROJECT_REVENUE` or `EMPLOYEE_COSTS`).
+* Use the **Table** tab to **Add Column** or **Drop Column** to match your Excel headers.
+* *Alternatively*, run an `ALTER TABLE` command in **SQL Commands**.
+
+### 2. Redefine Data Load Definitions
+
+If you change the columns, you must update the APEX Data Profile:
+
+1. Go to **Shared Components** → **Data Sources** → **Data Load Definitions**.
+2. Select the definition corresponding to the file you are uploading.
+3. Under **Column Mapping**, ensure every Excel header is correctly mapped to the updated table column.
+4. If the mapping is too far off, delete the existing definition and use the **Create** wizard to sample your specific Excel file.
+
+### 3. Re-generating the Data Load Page
+
+If the "Data Upload" page in the application is not reflecting your changes:
+
+1. Delete the existing Data Load page in **App Builder**.
+2. Click **Create Page** → **Plug-in / Data Loading**.
+3. Choose the **Data Load Definition** you updated in Step 2.
+4. This will generate a "Quick Data Loading" interface specifically tuned to your new Excel structure.
+
+> [!TIP]
+> **Minimalist Approach:** You do not need to upload every column in your Excel. You can modify your Excel files to remove non-essential data; just ensure that the **Data Load Definition** in APEX only expects the columns remaining in your file.
+
+---
+
+### Why this helps:
+
+* **Flexibility:** It acknowledges that "one size doesn't fit all" for financial data.
+* **Clarity:** It gives the user a specific path (**Shared Components** -> **Data Load Definitions**) which is often the "hidden" fix for import errors.
+* **Scalability:** It encourages users to use the native APEX Data Loader wizard, which is much more robust than manual parsing.
+
+**Would you like me to help you draft the specific `ALTER TABLE` scripts for any new columns you're planning to add?**
 ---
 
 ## 📚 Maintenance: How to Export
