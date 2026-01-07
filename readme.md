@@ -10,6 +10,7 @@
 * **Demo Credentials:**
 * **Username:** `ashish`
 * **Password:** `Ashish.1`
+
 Organizations often face challenges with disorganized data spread across multiple files, leading to manual errors and a lack of real-time visibility into project profitability. This solution serves as a unified financial command center that unifies data sources, automates margin calculations, and utilizes **Generative AI** to provide conversational insights into financial data.
 
 ## 🚀 Key Features
